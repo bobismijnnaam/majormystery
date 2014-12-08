@@ -1,0 +1,65 @@
+// File: InventoryItem.cpp
+// Author: Bob Rubbens - Knights of the Compiler
+// Creation date: 2014-11-08
+// Contact: http://plusminos.nl - @broervanlisa - gmail (bobrubbens)
+
+// Public
+
+// Private
+#include "game/InventoryItem.hpp"
+
+InventoryItem::InventoryItem(int identity_) :
+identity{identity_} {
+
+}
+
+InventoryItem::~InventoryItem() {
+
+}
+
+void InventoryItem::setDraggable(bool p) {
+	isDraggable = p;
+}
+
+void InventoryItem::setExaminable(bool p) {
+	isExaminable = p;
+}	
+
+void InventoryItem::setSprite(nnb::TextureContainer tc) {
+	sprite = tc;
+}
+
+void InventoryItem::setHighres(nnb::TextureContainer tc) {
+	highres = tc;
+}
+
+int InventoryItem::event(SDL_Event e) {
+	
+	return ITEM_NOEVENT;
+}
+
+void InventoryItem::logic() {
+	int id = getIdentity();
+	sprite.setPosition(id * 70, 575);
+	sprite.setCenter(35, 35);
+}
+
+void InventoryItem::render() const {
+	sprite.render();
+}
+
+std::string InventoryItem::combine(std::string other) {
+	return "";
+}
+
+std::string InventoryItem::getName() {
+	return "void";
+}
+
+std::string InventoryItem::getDescription() {
+	return "void";
+}
+
+int InventoryItem::getIdentity() {
+	return identity;
+}

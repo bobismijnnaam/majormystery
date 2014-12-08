@@ -1,0 +1,130 @@
+// File: ViewManager.cpp
+// Author: Bob Rubbens - Knights of the Compiler
+// Creation date: 2014-11-07
+// Contact: http://plusminos.nl - @broervanlisa - gmail (bobrubbens)
+
+// Public
+#include "SDL2/SDL.h"
+
+// Private
+#include "game/ViewManager.hpp"
+#include "views/Views.hpp"
+#include "main/global.hpp"
+#include "nnb/utils/unique_ptr.hpp"
+
+ViewManager::ViewManager() {
+	views["bedroomdoor"] = bedroomDoorView();
+	views["bedroom"] = bedroomView();
+	views["bed"] = bedView();
+	views["frontdoor"] = frontDoorView();
+	views["garagedoor"] = garageDoorView();
+	views["garage"] = garageView();
+	views["kitchendoor"] = kitchenDoorView();
+	views["kitchen"] = kitchenView();
+	views["outside"] = kitchenView();
+	views["table"] = tableView();
+	views["wakeup"] = wakeupView();
+	views["window"] = windowView();
+
+	currentView = views["wakeup"];
+	bg = g_tm->getTexture("views", currentView.bg);
+
+	top = g_tm->getTexture("views", "arrowleft.png");
+	top.setOrigin(25, 25);
+	left = g_tm->getTexture("views", "arrowleft.png");
+	left.setOrigin(25, 25);
+	right = g_tm->getTexture("views", "arrowleft.png");
+	right.setOrigin(25, 25);
+	bottom = g_tm->getTexture("views", "arrowleft.png");
+	bottom.setOrigin(25, 25);
+
+	top.setRotation(90);
+	top.setRotationCenter(25, 25);
+	right.setRotation(180);
+	right.setRotationCenter(25, 25);
+	bottom.setRotation(270); // 240
+	bottom.setRotationCenter(25, 25);
+
+	top.setPosition(500 / 2, 50);
+	bottom.setPosition(500/2, 500);
+	right.setPosition(475, 237);
+	left.setPosition(50/2, 237);
+
+	left.setSize(50, 50);
+	right.setSize(50, 50);
+	top.setSize(50, 50);
+	bottom.setSize(50, 50);
+}
+
+ViewManager::~ViewManager() {
+
+}
+
+// TODO: Cursor management
+void ViewManager::event(SDL_Event e) {
+	if (e.type == SDL_MOUSEBUTTONDOWN) {
+		if (e.button.y < 525) {
+			// It's in the player view
+			int mx = e.button.x;
+			int my = e.button.y;
+			std::string nextView = "";
+			if (mx < 50 && my > 50 && my < 475) {
+				// Go west!
+				nextView = currentView.west;
+			} else if (mx > 450 && my > 50 && my < 475) {
+				// Go east!
+				nextView = currentView.east;
+			} else if (mx > 50 && mx < 450 && my < 50) {
+				// Go north!
+				nextView = currentView.north;
+			} else if (mx > 50 && mx < 450 && my > 475) {
+				// Go south!
+				nextView = currentView.south;
+			}
+			if (nextView != "") {
+				queuedView = nextView;
+			} else {
+				currentView.click(e.button.x, e.button.y);
+			}
+		}
+	} 
+
+}
+
+void ViewManager::logic() {
+	// TODO: GUI animations? Tutorial?
+	if (queuedView != "") {
+		currentView = views[queuedView];
+		queuedView = "";
+		bg = g_tm->getTexture("views", currentView.bg);
+	}
+}
+
+void ViewManager::render() const {
+	bg.render();
+
+	currentView.render();
+
+	if (currentView.west != "")
+		left.render();
+	
+	if (currentView.east != "")
+		right.render();
+
+	if (currentView.north != "")
+		top.render();
+
+	if (currentView.south != "")
+		bottom.render();
+
+	// TODO: Render GUI? Overlay?
+}
+
+void ViewManager::switchView(std::string nextView) {
+	queuedView = nextView;
+}
+
+void ViewManager::itemDrop(int x, int y, int itemID) {
+	currentView.itemDrop(x, y, itemID);
+}
+

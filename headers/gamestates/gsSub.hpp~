@@ -1,0 +1,31 @@
+// Author: Bob Rubbens - Knights of the Compiler
+// Creation date: ma 21-07-2014
+// Contact: http://plusminos.nl - @broervanlisa - gmail (bobrubbens)
+
+#ifndef GSSUB_HPP
+#define GSSUB_HPP
+
+// Public
+#include <SDL2/SDL.h>
+
+// Private
+#include "nnb/states/GameState.hpp"
+
+class gsSub : public nnb::GameState {
+public:
+	gsSub();
+	void event(SDL_Event& e);
+	void logic(float delta);
+	void render() const;
+
+private:
+	Uint32 stateStart = 0;
+	bool goBack = false;
+	int mx = 0, my = 0;
+	int x = 0, y = 0;
+
+	float aggDelta = 0.0;
+	int ax = 0, ay = 0;
+} ;
+
+#endif

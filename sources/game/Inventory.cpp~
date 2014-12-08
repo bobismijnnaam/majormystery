@@ -1,0 +1,143 @@
+// File: Inventory.cpp
+// Author: Bob Rubbens - Knights of the Compiler
+// Creation date: 2014-11-08
+// Contact: http://plusminos.nl - @broervanlisa - gmail (bobrubbens)
+
+// Public
+#include "main/global.hpp"
+
+// Private
+#include "game/Inventory.hpp"
+
+Inventory::Inventory() {
+	load();
+}
+
+void Inventory::load() {
+	// Tier 1
+	sprites[ITEM_IRON] = g_tm->getTexture("items", "iron.png"); 
+	sprites[ITEM_C4] = g_tm->getTexture("items", "c4.png"); 
+	sprites[ITEM_TIN] = g_tm->getTexture("items", "tin.png"); 
+	sprites[ITEM_DETONATOR] = g_tm->getTexture("items", "detonator.png"); 
+	sprites[ITEM_THECELL] = g_tm->getTexture("items", "thecell.png"); 
+	sprites[ITEM_MYCELL] = g_tm->getTexture("items", "mycell.png"); 
+	sprites[ITEM_KEY] = g_tm->getTexture("items", "key.png"); 
+
+	// Tier 2
+	sprites[ITEM_RIGGEDC4] = g_tm->getTexture("items", "riggedc4.png");
+	sprites[ITEM_SMARTC4] = g_tm->getTexture("items", "smartc4.png");
+	sprites[ITEM_FAKEIRON] = g_tm->getTexture("items", "fakeiron.png");
+
+	for (int i = 0; i < ITEM_MAX; ++i) {
+		sprites[i].setOrigin(35, 35);
+	}
+
+	for (int i = 0; i <= ITEM_KEY; ++i) {
+		sprites[i].setPosition(i * 70 + 35, (ITEM_TOP + ITEM_BOT) / 2);
+	}
+
+	sprites[ITEM_RIGGEDC4].setPosition(ITEM_C4 * 70  + 35, (ITEM_TOP + ITEM_BOT) / 2);
+	sprites[ITEM_SMARTC4].setPosition(ITEM_THECELL * 70 + 35, (ITEM_TOP + ITEM_BOT) / 2);
+	sprites[ITEM_FAKEIRON].setPosition(ITEM_TIN * 70 + 35, (ITEM_TOP + ITEM_BOT) / 2);
+}
+
+Inventory::~Inventory() {
+
+}
+
+void Inventory::addItem(int id) {
+	inInventory[id] = true;
+	NNB_INFO << "Added item #" << id;
+}
+
+void Inventory::removeItem(int id) {
+	inInventory[id] = false;
+	NNB_INFO << "Removed item #" << id;
+}
+
+int Inventory::getSelectedItem() {
+	return selected;
+}
+
+bool Inventory::hasItem(int id) {
+	return inInventory[id];
+}
+
+void Inventory::event(SDL_Event e) {
+	// TODO: Display transparent picture of currently selected object
+	if (e.type == SDL_MOUSEMOTION) {
+		mx = e.motion.x;
+		my = e.motion.y;
+		selectedSprite.setPosition(mx, my);
+	} else if (e.type == SDL_MOUSEBUTTONDOWN) {
+		 if (e.button.y > ITEM_TOP && e.button.y < ITEM_BOT) {
+			if (e.button.button == SDL_BUTTON_LEFT) {
+				int hoverID = e.button.x / 70;
+				selected = hoverID;
+				selectedSprite = sprites[hoverID].clone();
+				
+				selectedSprite.setPosition(mx, my);
+				selectedSprite.setSize(50, 50);
+				selectedSprite.setOrigin(25, 25);
+				NNB_INFO << "Left button!";
+			} else if (e.button.button == SDL_BUTTON_RIGHT) {
+				g_inf->setLines("My precious iron. I could give it to the pirates.",
+						"Or I could...");
+				NNB_INFO << "Right button!";
+			}
+		 }
+	} else if (e.type == SDL_MOUSEBUTTONUP) {
+		if (e.button.y > ITEM_TOP && e.button.y < ITEM_BOT) {
+			int hoverID = e.button.x / 70;
+			if (hoverID != selected) {
+				int selected2 = 1 << selected;
+				int hover2 = 1 << hoverID;
+				
+				switch (selected2 | hover2) {
+					case ITEM_COMBIRIGGEDC4:
+						inInventory[ITEM_C4] = false;
+						inInventory[ITEM_DETONATOR] = false;
+						inInventory[ITEM_RIGGEDC4] = true;
+						break;
+					case ITEM_COMBISMARTC4:
+						if (inInventory[ITEM_RIGGEDC4]) {
+							inInventory[ITEM_RIGGEDC4] = false;
+							inInventory[ITEM_THECELL] = false;
+							inInventory[ITEM_SMARTC4] = true;
+						}
+						break;
+					case ITEM_COMBIFAKEIRON:
+						if (inInventory[ITEM_SMARTC4]) {
+							inInventory[ITEM_SMARTC4] = false;
+							inInventory[ITEM_TIN] = false;
+							inInventory[ITEM_FAKEIRON] = true;
+						}
+						break;
+					default:
+						// No combinations were made
+						break;
+				}
+			} 
+		} else if (selected != ITEM_NONE) {
+			g_vm->itemDrop(e.button.x, e.button.y, selected);
+		}
+
+		selected = ITEM_NONE;
+	}
+}
+
+void Inventory::logic() {
+	// Nothing to be done here yet
+}
+
+void Inventory::render() const {
+	for (int i = 0; i < ITEM_MAX; ++i) {
+		if (inInventory[i]) {
+			sprites[i].render();
+		}
+	}
+
+	if (selected != ITEM_NONE) {
+		selectedSprite.render();
+	}
+}

@@ -1,0 +1,66 @@
+// File: Information.cpp
+// Author: Bob Rubbens - Knights of the Compiler
+// Creation date: 2014-11-28
+// Contact: http://plusminos.nl - @broervanlisa - gmail (bobrubbens)
+
+// Public
+#include <string>
+
+// Private
+#include "game/Information.hpp"
+#include "main/global.hpp"
+#include "nnb/utils/SDL_Helpers.hpp"
+
+Information::Information() {
+	line1Text = g_fm->getText("GentiumPlus-R.ttf", 25);
+	line2Text = g_fm->getText("GentiumPlus-R.ttf", 25);
+
+	line1Text.setAlign(nnb::Align::CENTER);
+	line1Text.setPosition(SCR_W / 2, 451);
+	line1Text.setColor(255, 255, 255);
+
+	line2Text.setAlign(nnb::Align::CENTER);
+	line2Text.setPosition(SCR_W / 2, 489);
+	line2Text.setColor(255, 255, 255);
+}
+
+Information::~Information() {
+
+}
+
+void Information::setLine1(std::string text) {
+	line1 = text;
+	updateLines();
+}
+
+void Information::setLine2(std::string text) {
+	line2 = text;
+	updateLines();
+}
+
+void Information::setLines(std::string text1, std::string text2) {
+	line1 = text1;
+	line2 = text2;
+	updateLines();
+}
+
+void Information::updateLines() {
+	line1Text.setText(line1);
+	line2Text.setText(line2);
+	NNB_INFO << "Lines were updated.\nLine 1: " << line1 << "\nLine 2: " << line2;
+}
+
+void Information::event(SDL_Event e) {
+	SDL_Rect msgZone = {0, 450, 500, 75};
+	if (e.type == SDL_MOUSEBUTTONDOWN) {
+		SDL_Point m = {e.button.x, e.button.y};
+		if (nnb::pointInRect(m, msgZone) && e.button.button == SDL_BUTTON_LEFT) {
+			setLines("", "");
+		}
+	}
+}
+
+void Information::render() const {
+	line1Text.render();
+	line2Text.render();
+}

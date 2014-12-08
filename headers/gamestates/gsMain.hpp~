@@ -1,0 +1,50 @@
+// Author: Bob Rubbens - Knights of the Compiler
+// Creation date: ma 21-07-2014
+// Contact: http://plusminos.nl - @broervanlisa - gmail (bobrubbens)
+
+#ifndef GSMAIN_HPP
+#define GSMAIN_HPP
+
+// Public
+#include <SDL2/SDL.h>
+#include <string>
+#include <vector>
+
+// Private
+#include "nnb/states/GameState.hpp"
+#include "nnb/utils/FLoatRect.hpp"
+#include "nnb/resources/TextureManager.hpp"
+#include "nnb/resources/FontManager.hpp"
+#include "world/Camera.hpp"
+#include "world/Player.hpp"
+#include "world/World.hpp"
+
+class gsMainMenu : public nnb::GameState {
+public:
+	gsMain();
+	~gsMain();
+
+	void event(SDL_Event& e);
+	void logic(float delta);
+	void render() const;
+
+	void activate(); 
+	void deactivate();
+
+private:
+	Uint32 stateStart = 0;
+
+	World world;
+
+	Camera cam;
+
+	Player player;
+
+	nnb::TextureManager tm;
+	nnb::FontManager fm;
+
+	nnb::PersistentTexture pt;
+	nnb::PersistentText label;
+} ;
+
+#endif

@@ -1,0 +1,63 @@
+// File: Inventory.hpp
+// Author: Bob Rubbens - Knights of the Compiler
+// Creation date: 2014-11-08
+// Contact: http://plusminos.nl - @broervanlisa - gmail (bobrubbens)
+
+#ifndef INVENTORY_HPP
+#define INVENTORY_HPP
+
+// Public
+
+// Private
+#include "nnb/graphics/TextureContainer.hpp"
+
+// Items
+// Tier 1
+int const ITEM_NONE = -1;
+int const ITEM_IRON = 0;
+int const ITEM_C4 = 1;
+int const ITEM_TIN = 2;
+int const ITEM_DETONATOR = 3;
+int const ITEM_THECELL = 4;
+int const ITEM_MYCELL = 5;
+int const ITEM_KEY = 6;
+
+// Tier 2
+int const ITEM_RIGGEDC4 = 7; // C4 + DETONATOR
+int const ITEM_COMBIRIGGEDC4 = 1 << ITEM_C4 | 1 << ITEM_DETONATOR;
+int const ITEM_SMARTC4 = 8; // RIGGED C4 + THECELL
+int const ITEM_COMBISMARTC4 = 1 << ITEM_C4 | 1 << ITEM_THECELL;
+int const ITEM_FAKEIRON = 9; // SMART C4 + TIN FOIL
+int const ITEM_COMBIFAKEIRON = 1 << ITEM_TIN | 1 << ITEM_THECELL;
+
+int const ITEM_MAX = 10;
+
+// Visual item ranges
+int const ITEM_TOP = 525;
+int const ITEM_BOT = 605;
+
+class Inventory {
+public:
+	Inventory();
+	~Inventory();
+
+	void load();
+
+	void addItem(int id);
+	void removeItem(int id);
+	int getSelectedItem();
+	bool hasItem(int id);
+
+	void event(SDL_Event e);
+	void logic();
+	void render() const;
+
+private:
+	nnb::TextureContainer sprites[ITEM_MAX];
+	bool inInventory[ITEM_MAX] = {false};
+	int selected = ITEM_NONE;
+	int mx, my = 0;
+	nnb::TextureContainer selectedSprite;
+} ;
+
+#endif

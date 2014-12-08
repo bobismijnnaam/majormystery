@@ -1,0 +1,41 @@
+// File: gsIntro.hpp
+// Author: Bob Rubbens - Knights of the Compiler
+// Creation date: 2014-12-06
+// Contact: http://plusminos.nl - @broervanlisa - gmail (bobrubbens)
+
+#ifndef GSINTRO_HPP
+#define GSINTRO_HPP
+
+// Public
+#include <math.h>
+
+// Private
+#include "nnb/states/GameState.hpp"
+#include "nnb/graphics/Text.hpp"
+#include "nnb/graphics/TextureContainer.hpp"
+
+class gsIntro : public nnb::GameState {
+public:
+	gsIntro();
+	~gsIntro();
+
+	void event(SDL_Event& e);
+	void logic(float delta);
+	void render() const;
+
+private:
+	Uint32 stateStart;
+	int ctr = 0;
+	nnb::Text ctrText;
+	nnb::Text locText;
+	
+	nnb::TextureContainer bg;
+	nnb::TextureContainer locationMark[3];
+
+	bool doWeird = false;
+	int weirdTimer = 0;
+	nnb::Text weirdText;
+	nnb::TextureContainer bodyparts[3];
+} ;
+
+#endif

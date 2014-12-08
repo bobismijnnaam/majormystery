@@ -1,0 +1,42 @@
+// File: Battery.cpp
+// Author: Bob Rubbens - Knights of the Compiler
+// Creation date: 2014-12-06
+// Contact: http://plusminos.nl - @broervanlisa - gmail (bobrubbens)
+
+// Public
+#include <algorithm>
+
+// Private
+#include "game/Battery.hpp"
+#include "main/global.hpp"
+
+Battery::Battery() {
+	powerbar = g_tm->getTexture("game", "powerbar.png");
+	powerbar.setPosition(18, 102);
+
+	power = 0;
+	lastDecreaseLevel = 0;
+}
+
+Battery::~Battery() {
+
+}
+
+bool Battery::decrease() {
+	actualPower = std::max(100, power + (SDL_GetTicks() - lastDecrease) * WATT);
+
+	if (actualPower >= PHOTOCOST) {
+		power -= PHOTOCOST;
+		return true;
+	} else {
+		return false;
+	}
+}
+
+void Battery::logic() {
+	
+}
+
+void Battery::render() const {
+
+}

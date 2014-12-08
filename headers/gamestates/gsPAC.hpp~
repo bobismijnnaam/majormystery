@@ -1,0 +1,26 @@
+// Author: Bob Rubbens - Knights of the Compiler
+// Creation date: 2014-11-07
+// Contact: http://plusminos.nl - @broervanlisa - gmail (bobrubbens)
+
+#ifndef GSPAC_HPP
+#define GSPAC_HPP
+
+// Public
+#include <SDL2/SDL.h>
+
+// Private
+#include "nnb/states/GameState.hpp"
+
+class gsPAC : public nnb::GameState {
+public:
+	gsPAC();
+	void event(SDL_Event& e);
+	void logic(float delta);
+	void render() const;
+
+private:
+	Uint32 stateStart = 0;
+
+} ;
+
+#endif

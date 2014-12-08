@@ -1,0 +1,24 @@
+// File: Views.hpp
+// Author: Bob Rubbens - Knights of the Compiler
+// Creation date: 2014-11-09
+// Contact: http://plusminos.nl - @broervanlisa - gmail (bobrubbens)
+
+#ifndef VIEWS_HPP
+#define VIEWS_HPP
+
+// Public
+
+// Private
+
+class WakeupView : View {
+public:
+	WakeupView();
+	
+	std::string getWest() override;
+
+private:
+	nnb::TextureContainer bg;
+
+} ;
+
+#endif

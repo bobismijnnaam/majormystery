@@ -1,0 +1,71 @@
+// File: View.cpp
+// Author: Bob Rubbens - Knights of the Compiler
+// Creation date: 2014-11-07
+// Contact: http://plusminos.nl - @broervanlisa - gmail (bobrubbens)
+
+// Public
+#include <string>
+#include <functional>
+
+// Private
+#include "game/View.hpp"
+
+// struct View {
+// 	std::string bg = "";
+// 	std::string north = "", east = "", south = "", west = "";
+// 	std::function<void(int, int)> click = [] (int x, int y) {};
+// 	std::function<void(int, int, int)> itemDrop = [] (int x, int y, int itemID) {};
+// 	std::function<void()> render = [] () {};
+// } ;
+
+/*
+
+View::View() {
+}
+
+View::~View() {
+
+}
+
+void View::render() const {
+	bg.render();
+}
+
+void View::setInventory(Inventory* inv_) {
+	inv = inv_;
+}
+
+void View::click(int x, int y) {
+
+}
+
+bool View::itemDrop(int x, int y, int itemID) {
+	return false;
+}
+
+void View::enter() {
+
+}
+
+void View::leave() {
+	
+}
+
+
+std::string View::getNorth() {
+	return "";
+}
+
+std::string View::getSouth() {
+	return "";
+}
+
+std::string View::getEast() {
+	return "";
+}
+
+std::string View::getWest() {
+	return "";
+}
+
+*/

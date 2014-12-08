@@ -1,0 +1,54 @@
+// File: View.hpp
+// Author: Bob Rubbens - Knights of the Compiler
+// Creation date: 2014-11-07
+// Contact: http://plusminos.nl - @broervanlisa - gmail (bobrubbens)
+
+#ifndef VIEW_HPP
+#define VIEW_HPP
+
+// Public
+// #include <SDL2/SDL.h>
+// #include <string>
+
+// Private
+// #include "game/Inventory.hpp"
+
+/*
+
+class View {
+public:
+	View();
+	~View();
+
+	virtual void render() const;
+
+	void setInventory(Inventory* inv_);
+
+	virtual void click(int x, int y);
+	virtual bool itemDrop(int x, int y, int itemID);
+
+	virtual void enter();
+	virtual void leave();
+	
+	virtual std::string getNorth();
+	virtual std::string getSouth();
+	virtual std::string getEast();
+	virtual std::string getWest();
+
+protected:
+	Inventory* inv = nullptr;
+	nnb::TextureContainer bg;
+
+} ;
+
+*/
+
+struct View {
+	std::string bg = "";
+	std::string north = "", east = "", south = "", west = "";
+	std::function<void(int, int)> click = [] (int x, int y) {};
+	std::function<void(int, int, int)> itemDrop = [] (int x, int y, int itemID) {};
+	std::function<void()> render = [] () {};
+} ;
+
+#endif

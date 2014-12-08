@@ -1,0 +1,100 @@
+# TODO: Switch to RPATH instead of statically compiling for optimal future proofness
+
+# Program name
+APP := ludumbobe31
+
+# Used compiler
+# For emscripten compiling
+# CC := em++
+# For windows compiling
+CC := g++ 
+
+# Used libraries
+LIBS += -lnutsnbolts
+LIBS += -lmingw32
+LIBS += -lSDL2_gfx
+LIBS += -lSDL2_image
+LIBS += -lSDL2_mixer
+LIBS += -lSDL2_ttf
+LIBS += -lSDL2main
+LIBS += -lSDL2
+LIBS += -static-libstdc++ 
+LIBS += -static-libgcc
+
+# Standard optimization level
+# CFLAGS += -O
+
+# Release optimization level
+# CFLAGS += -O3
+
+# Gets rid of the console window
+# CFLAGS += -Wl,-subsystem,windows
+CFLAGS += -mwindows
+
+# Most important!
+CFLAGS += -std=c++11
+
+CFLAGS += -g
+# CFLAGS += -Wall
+# CFLAGS += -Weffc++
+CFLAG += -Wuninitialized
+CFLAGS += -pedantic
+CFLAGS += -pedantic-errors
+CFLAGS += -Wfloat-equal
+CFLAGS += -Wlong-long
+CFLAGS += -Wmissing-field-initializers
+CFLAGS += -Wmissing-include-dirs
+CFLAGS += -Wmissing-noreturn
+CFLAGS += -Wshadow
+CFLAGS += -Wswitch-default
+CFLAGS += -Wswitch-enum
+CFLAGS += -Wunreachable-code
+CFLAGS += -Wunused
+CFLAGS += -Werror
+
+CFLAGS += -DNNB_LOGLVL_VERBOSE
+
+# All include search directories
+INCLUDE_DIRS += -I $(TUP_CWD)\headers
+INCLUDE_DIRS += -I c:\nnb\headers
+INCLUDE_DIRS += -I c:\MinGW\include
+
+# All library search directories
+LIB_DIRS += -L c:\nnb\bin
+# LIB_DIRS += -L c:\MinGW\lib
+
+# To convert *.cpp -> *.o
+!cc = |> ^ Compiling %d/%f^ $(CC) $(INCLUDE_DIRS) $(LIB_DIRS) $(CFLAGS) $(LIBS) -c %f -o %o |> ../../build/%d-%B.o ../<submodules>
+
+# To convert all *.o -> one big *.o
+!lnk = |> ^ Linking %d^ ld -r %f -o %o |> ../../build/%d.o ../<modules>
+
+# To convert *.cpp -> module.o
+!ctoo = |> ^ Compiling %d^ $(CC) $(INCLUDE_DIRS) $(LIB_DIRS) $(CFLAGS) $(LIBS) -c %f -o %o |> ../../build/%d.o ../<modules>
+
+# TODO: This method is not really nice, since ld tends to grab c libraries and not c++ ones (that's why -lsupc++ is needed)
+
+########################################################################################################################
+# Some handy compiler warning flags
+# Unused because commented
+# -g -O -Wall -Weffc++ -pedantic  \
+# -pedantic-errors -Wextra -Waggregate-return -Wcast-align \
+# -Wcast-qual -Wconversion \
+# -Wdisabled-optimization \
+# -Werror -Wfloat-equal -Wformat=2 \
+# -Wformat-nonliteral -Wformat-security  \
+# -Wformat-y2k \
+# -Wimplicit  -Wimport  -Winit-self  -Winline \
+# -Winvalid-pch   \
+# -Wlong-long \	
+# -Wmissing-field-initializers -Wmissing-format-attribute   \
+# -Wmissing-include-dirs -Wmissing-noreturn \
+# -Wpacked  -Wpadded -Wpointer-arith \
+# -Wredundant-decls \
+# -Wshadow -Wstack-protector \
+# -Wstrict-aliasing=2 -Wswitch-default \
+# -Wswitch-enum \
+# -Wunreachable-code -Wunused \
+# -Wunused-parameter \
+# -Wvariadic-macros \
+# -Wwrite-strings

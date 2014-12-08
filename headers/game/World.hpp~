@@ -1,0 +1,31 @@
+// File: World.hpp
+// Author: Bob Rubbens - Knights of the Compiler
+// Creation date: 2014-11-21
+// Contact: http://plusminos.nl - @broervanlisa - gmail (bobrubbens)
+
+#ifndef WORLD_HPP
+#define WORLD_HPP
+
+// Public
+
+// Private
+
+class World {
+public:
+	World();
+	~World();
+
+	bool theCell = true;
+	bool myCell = true;
+	bool hasC4 = true;
+	bool hasIron = true;
+	bool leftOpen = false;
+	bool rightOpen = false;
+
+	bool pillowUp = false;
+
+private:
+
+} ;
+
+#endif

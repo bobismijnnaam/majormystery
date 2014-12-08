@@ -1,0 +1,61 @@
+// File: InventoryItem.hpp
+// Author: Bob Rubbens - Knights of the Compiler
+// Creation date: 2014-11-08
+// Contact: http://plusminos.nl - @broervanlisa - gmail (bobrubbens)
+
+#ifndef INVENTORYITEM_HPP
+#define INVENTORYITEM_HPP
+
+// Public
+
+// Private
+
+int const ITEM_NOEVENT = 0;
+int const ITEM_SELECTED = 1;
+
+int const ITEM_IRON = 0;
+int const ITEM_C4 = 1;
+int const ITEM_TIN = 2;
+int const ITEM_DETONATOR = 3;
+int const ITEM_THECELL = 4;
+int const ITEM_MYCELL = 5;
+int const ITEM_KEY = 6;
+
+class InventoryItem {
+public:
+	InventoryItem(int identity_);
+	~InventoryItem();
+
+	// To set position in the list
+	// As in first, second, and so on
+	virtual void setDraggable(bool p);
+	virtual void setExaminable(bool p);
+	virtual void setSprite(nnb::TextureContainer tc);
+	virtual void setHighres(nnb::TextureContainer tc);
+
+	virtual void event(SDL_Event e);
+	// For tweening and stuff
+	virtual void logic();
+	virtual void render();
+
+	// To combine with other items
+	virtual std::string combine(std::string other);
+
+	// Some meta
+	virtual std::string getName();
+	virtual std::string getDescription();
+	virtual int getIdentity();
+
+protected:
+	nnb::TextureContainer sprite;
+	nnb::TextureContainer highres;
+
+private:
+	int pos = 0, listLen = 0;
+	bool isDraggable = false;
+	bool isExaminable = false;
+	int identity = -1;
+
+} ;
+
+#endif

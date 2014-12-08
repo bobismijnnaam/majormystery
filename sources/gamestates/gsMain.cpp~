@@ -1,0 +1,128 @@
+// Author: Bob Rubbens - Knights of the Compiler
+// Creation date: ma 21-07-2014
+// Contact: http://plusminos.nl - @broervanlisa - gmail (bobrubbens)
+
+// Public
+#include <cmath>
+#include <iostream>
+#include <SDL2/SDL.h>
+#include <string>
+#include <vector>
+
+// Private
+#include "gamestates/gsMain.hpp"
+#include "main/global.hpp"
+#include "nnb/log/log.hpp"
+#include "nnb/utils/constants.hpp"
+#include "nnb/utils/SDL_Helpers.hpp"
+
+std::vector<std::string> lvl1 {
+	"                                 ",
+	"                                 ",
+	"            #########            ",
+	"                                 ",
+	"                                 ",
+	"                                 ",
+	"     #######           ########  ",
+	"                                 ",
+	"                                 ",
+	"                 *               ",
+	"          -=+########+=-         ",
+	"    -====+##############+====-   ",
+	"#################################"
+};
+
+std::vector<std::string> lvl2 {
+	"                                                                         ",
+	"            ###################################                          ",
+	"                                                                         ",
+	"                                                                         ",
+	"                                                                      ###",
+	"          #############             ############               ##########",
+	"                                                            #############",
+	"                                                              ######  ###",
+	"                                                              ######  ###",
+	"    #####                 ##                      #######################",
+	"                          ##                   ##########                ",
+	"                          ##                #########                    ",
+	"          -=+#+=-         ##            #########                        ",
+	"  * -====+#########       ##        #########                            ",
+	"#########################################################################"
+};
+
+gsMain::gsMain() :
+world(lvl2),
+cam(SCR_W, SCR_H, TILE_SIZE),
+player(),
+tm(g_renderer),
+fm(g_renderer) { 
+	
+	player.setPosition(world.getSpawn());
+	
+	stateStart = SDL_GetTicks();
+
+	tm.loadGroup("Act1");
+	tm.loadGroup("Act2");
+
+	pt = tm.getTexture("default", "2.png");
+	pt.setPosition(200, 200);
+
+	label = fm.getText("GentiumPlus-R.ttf", 80);
+	label.setText("LABEL WERKT OMG");
+	label.setColor(nnb::Color::GREEN);
+	label.setAlign(nnb::Align::RIGHT);
+	label.setPosition(640, 0);
+	label.setAlpha(100);
+}
+
+gsMain::~gsMain() {
+	NNB_LOG << "Bye bye main";
+}
+
+void gsMain::event(SDL_Event& e) {
+	
+	player.event(e);
+	
+	switch (e.type) {
+		case SDL_QUIT:
+			g_gm->changeState(nnb::StateAction::SET, nnb::StateMachine::STATE_EXIT);
+			NNB_LOG << "Exit was requested";
+			break;
+		case SDL_MOUSEBUTTONUP:
+			NNB_LOG << "Mouse button was pressed at (" << e.button.x << "; " << e.button.y << ")";
+			break;
+		default:
+			break;
+	}
+
+}
+
+void gsMain::logic(float delta) {
+	player.logic(world, delta);
+	
+	cam.follow(player, delta);
+}
+
+void gsMain::render() const {
+	SDL_SetRenderDrawColor(g_renderer, 255, 255, 255, 255);
+	SDL_RenderClear(g_renderer);
+
+	world.debugRender(g_renderer, cam);
+
+	player.debugRender(g_renderer, cam);
+
+	pt.render();
+
+	label.render();
+
+	SDL_RenderPresent(g_renderer);
+}
+
+void gsMain::activate() {
+	stateStart = SDL_GetTicks();
+	NNB_LOG << "main activated";
+}
+
+void gsMain::deactivate() {
+	NNB_LOG << "main deactivated";
+}

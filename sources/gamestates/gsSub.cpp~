@@ -1,0 +1,68 @@
+// Author: Bob Rubbens - Knights of the Compiler
+// Creation date: ma 20-01-2014
+// Contact: http://plusminos.nl - @broervanlisa - gmail (bobrubbens)
+
+// Public
+#include <cmath>
+#include <SDL2/SDL.h>
+#include <string>
+
+// Private
+#include "gamestates/gsSub.hpp"
+#include "main/global.hpp"
+#include "nnb/log/log.hpp"
+#include "nnb/states/GameState.hpp"
+#include "square/square.hpp"
+
+gsSub::gsSub() {
+	stateStart = SDL_GetTicks();
+}
+
+void gsSub::event(SDL_Event& e) {
+	switch (e.type) {
+		case SDL_QUIT:
+			g_gm->changeState(nnb::StateAction::SET, nnb::StateMachine::STATE_EXIT);
+			break;
+		case SDL_MOUSEBUTTONUP:
+			NNB_LOG << "Mouse button released at (" << e.button.x << "; " << e.button.y << ")";
+			mx = e.button.x;
+			my = e.button.y;
+			goBack = true;
+			break;
+		default:
+			break;
+	}
+}
+
+void gsSub::logic(float delta) {
+	float deltaTime = ((SDL_GetTicks() - stateStart) % 1000) / 1000.0;
+
+	x = 100 + 300 * deltaTime;
+	y = 100;
+
+	aggDelta += delta;
+	deltaTime = fmod(aggDelta, 1.0);
+
+	ax = 100 + 300 * deltaTime;
+	ay = 300;
+
+	if (goBack) {
+		if (mx >= x && mx <= x + 100 && my >= y && my <= y + 100) {
+			g_gm->changeState(nnb::StateAction::POP);
+			NNB_LOG << "Top: " << deltaTime << ", bottom: " << aggDelta;
+		}
+		
+		goBack = false;
+	}
+}
+
+void gsSub::render() const {
+	SDL_SetRenderDrawColor(g_renderer, 0, 0, 0, 255);
+	SDL_RenderClear(g_renderer);
+
+	drawSquare(g_renderer, x, y, 255, 128, 20);
+
+	drawSquare(g_renderer, ax, ay, 0, 128, 20);
+
+	SDL_RenderPresent(g_renderer);
+}

@@ -1,0 +1,41 @@
+// Author: Bob Rubbens - Knights of the Compiler
+// Creation date: 2014-11-07
+// Contact: http://plusminos.nl - @broervanlisa - gmail (bobrubbens)
+
+#ifndef GSMAINMENU_HPP
+#define GSMAINMENU_HPP
+
+// Public
+#include <SDL2/SDL.h>
+#include <string>
+#include <vector>
+
+// Private
+#include "nnb/states/GameState.hpp"
+#include "nnb/utils/FloatRect.hpp"
+#include "nnb/resources/TextureManager.hpp"
+#include "nnb/resources/FontManager.hpp"
+
+class gsMainMenu : public nnb::GameState {
+public:
+	gsMainMenu();
+	~gsMainMenu();
+
+	void event(SDL_Event& e);
+	void logic(float delta);
+	void render() const;
+
+private:
+	nnb::Text label;
+	nnb::Text msg;
+	int stateStart = 0;
+
+	nnb::Text play, help;
+	nnb::TextureContainer bg, spacer;
+
+	SDL_Rect left, right;
+	SDL_Rect playZone, helpZone;
+	bool hoverPlay = false, hoverHelp = false;
+} ;
+
+#endif

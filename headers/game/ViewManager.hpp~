@@ -1,0 +1,38 @@
+// File: ViewManager.hpp
+// Author: Bob Rubbens - Knights of the Compiler
+// Creation date: 2014-11-07
+// Contact: http://plusminos.nl - @broervanlisa - gmail (bobrubbens)
+
+#ifndef VIEWMANAGER_HPP
+#define VIEWMANAGER_HPP
+
+// Public
+#include <unordered_map>
+#include <string>
+#include <memory>
+#include <SDL2/SDL.h>
+
+// Private
+#include "game/View.hpp"
+#include "nnb/graphics/TextureContainer.hpp"
+
+class ViewManager {
+public:
+	ViewManager();
+	~ViewManager();
+
+	void event(SDL_Event e);
+	void logic();
+	void render() const;
+
+	void switchView(std::string nextView);
+
+private:
+	std::unordered_map<std::string, View> views;
+	View currentView;
+	std::string queuedView = "";
+
+	nnb::TextureContainer top, right, bottom, left, bg;
+} ;
+
+#endif

@@ -1,0 +1,41 @@
+// File: Information.hpp
+// Author: Bob Rubbens - Knights of the Compiler
+// Creation date: 2014-11-28
+// Contact: http://plusminos.nl - @broervanlisa - gmail (bobrubbens)
+
+#ifndef INFORMATION_HPP
+#define INFORMATION_HPP
+
+// Public
+#include <string>
+#include <SDL2/SDL.h>
+
+// Private
+
+int const MSG_TOP = 450;
+int const MSG_BOT = 525;
+int const MSG_LEFT = 0;
+int const MSG_RIGHT = 500;
+
+class Information {
+public:
+	Information();
+	~Information();
+
+	void setLine1(std::string text);
+	void setLine2(std::string text);
+	void setLines(std::string text1, std::string text2);
+	void updateLines();
+
+	void event(SDL_Event e);
+	void render() const;
+
+
+private:
+	std::string line1;
+	std::string line2;
+	nnb::Text line1Text;
+	nnb::Text line2Text;
+} ;
+
+#endif
